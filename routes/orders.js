@@ -35,7 +35,7 @@ router.post("/", (req, res) => {
       [price, date, user_id]
     )
     .then((data) => res.status(201).json(data.rows))
-    .catch((e) => res.send(e.message));
+    .catch((e) => res.send(404));
 });
 
 router.put("/:id", (req, res) => {
@@ -43,7 +43,10 @@ router.put("/:id", (req, res) => {
   const { price, date, user_id } = req.body;
 
   pool
-    .query("UPDATES orders SET price=$1 WHERE id=$2 RETURNING*;", [price, id])
+    .query(
+      "UPDATE orders SET price=$1, date=$2, user_id=$3 WHERE id=$4 RETURNING*;",
+      [price, date, user_id, id]
+    )
     .then((data) => res.status(201).json(data.rows))
     .catch((e) => res.send(404));
 });

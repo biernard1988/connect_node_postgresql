@@ -43,10 +43,10 @@ router.put("/:id", (req, res) => {
   const { first_name, last_name, age, active } = req.body;
 
   pool
-    .query("UPDATES users SET first_name=$1 WHERE id=$2 RETURNING*;", [
-      first_name,
-      id,
-    ])
+    .query(
+      "UPDATE users SET first_name=$1, last_name=$2, age=$3, active=$4 WHERE id=$5 RETURNING*;",
+      [first_name, last_name, age, active, id]
+    )
     .then((data) => res.status(201).json(data.rows))
     .catch((e) => res.send(404));
 });
